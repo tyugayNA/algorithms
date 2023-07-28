@@ -79,19 +79,30 @@
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "C:/Users/tyugay/Documents/education/algorithms/algs4.jar",
+    "last_opened_file_path": "C:/Users/tyuga/Documents/education/Algorithms/hello",
     "settings.editor.selected.configurable": "terminal"
   }
 }]]></component>
-  <component name="RunManager" selected="Application.Barnsley">
+  <component name="RunManager" selected="Application.RandomWord">
     <configuration name="Barnsley" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="Barnsley" />
       <module name="Algorithms, Part I" />
       <option name="PROGRAM_PARAMETERS" value="10000" />
       <method v="2" />
     </configuration>
+    <configuration name="HelloGoodbye" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="HelloGoodbye" />
+      <module name="Algorithms, Part I" />
+      <option name="PROGRAM_PARAMETERS" value=" tom jay" />
+      <method v="2" />
+    </configuration>
     <configuration name="HelloWorld" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="HelloWorld" />
+      <module name="Algorithms, Part I" />
+      <method v="2" />
+    </configuration>
+    <configuration name="RandomWord" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="RandomWord" />
       <module name="Algorithms, Part I" />
       <method v="2" />
     </configuration>
