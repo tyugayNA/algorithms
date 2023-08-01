@@ -47,8 +47,7 @@ public class Percolation {
                 weightedQuickUnionUF.union(cell, cellUp);
                 backwashUF.union(cell, cellUp);
             }
-        }
-        else {
+        } else {
             weightedQuickUnionUF.union(cell, virtualTop);
             backwashUF.union(cell, virtualTop);
         }
@@ -60,10 +59,11 @@ public class Percolation {
                 weightedQuickUnionUF.union(cell, cellDown);
                 backwashUF.union(cell, cellDown);
             }
-        }
-        else {
+        } else {
             weightedQuickUnionUF.union(cell, virtualBottom);
-            backwashUF.union(cell, virtualBottom);
+            if (backwashUF.find(virtualTop) == backwashUF.find(cell)) {
+                backwashUF.union(cell, virtualBottom);
+            }
         }
 
         // check cell left
