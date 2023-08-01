@@ -23,9 +23,9 @@ public class Percolation {
         openSites = 0;
         grid = new boolean[n][n];
         weightedQuickUnionUF = new WeightedQuickUnionUF(n * n + 2);
-        backwashUF = new WeightedQuickUnionUF(n * n + 2);
-        virtualTop = n * n + 1;
-        virtualBottom = n * n;
+        backwashUF = new WeightedQuickUnionUF(n * n + 1);
+        virtualTop = n * n;
+        virtualBottom = n * n + 1;
     }
 
     // opens the site (row, col) if it is not open already
@@ -34,11 +34,40 @@ public class Percolation {
         int cell;
         int x = row - 1, y = col - 1;
 
-        if (!grid[x][y]) {
-            grid[x][y] = true;
-            openSites++;
+        if (isOpen(row, col)) {
+            return;
         }
+        grid[x][y] = true;
+        openSites++;
         cell = x * grid.length + y;
+
+        if (row == 1) {
+            weightedQuickUnionUF.union(cell, virtualTop);
+            backwashUF.union(cell, virtualTop);
+        }
+        if (row == grid.length) {
+            weightedQuickUnionUF.union(cell, virtualBottom);
+        }
+        if (isOpen(row - 1, col)) {
+            int cellAbove = (x - 1) * grid.length + y;
+            weightedQuickUnionUF.union(cell, cellAbove);
+            backwashUF.union(cell, cellAbove);
+        }
+        if (isOpen(row + 1, col)) {
+            int cellBelow = (x + 1) * grid.length + y;
+            weightedQuickUnionUF.union(cell, cellBelow);
+            backwashUF.union(cell, cellBelow);
+        }
+        if (isOpen(row, col - 1)) {
+            int cellLeft = x * grid.length + y - 1;
+            weightedQuickUnionUF.union(cell, cellLeft);
+            backwashUF.union(cell, cellLeft);
+        }
+        if (isOpen(row, col + 1)) {
+            int cellRight = x * grid.length + y - 1;
+            weightedQuickUnionUF.union(cell, cellRight);
+            backwashUF.union(cell, cellRight);
+        }
 
         // check cell above
         if (x - 1 > 0) {
