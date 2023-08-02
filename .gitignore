@@ -1,2 +1,6 @@
-algorithms.iml
-hello/.idea
+*.iml
+*.class
+*.zip
+*.xml
+hello/.idea/
+hello/.lift/
