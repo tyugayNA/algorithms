@@ -4,16 +4,15 @@
  *  Last modified:     October 16, 1842
  **************************************************************************** */
 
-import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
     private int openSites;
-    private int virtualTop;
-    private int virtualBottom;
-    private boolean[][] grid;
-    private WeightedQuickUnionUF weightedQuickUnionUF;
-    private WeightedQuickUnionUF backwashUF;
+    private final int virtualTop;
+    private final int virtualBottom;
+    private final boolean[][] grid;
+    private final WeightedQuickUnionUF weightedQuickUnionUF;
+    private final WeightedQuickUnionUF backwashUF;
 
     // creates n-by-n grid, with all sites initially blocked
     public Percolation(int n) {
@@ -42,76 +41,33 @@ public class Percolation {
         cell = x * grid.length + y;
 
         if (row == 1) {
-            weightedQuickUnionUF.union(cell, virtualTop);
-            backwashUF.union(cell, virtualTop);
+            weightedQuickUnionUF.union(virtualTop, cell);
+            backwashUF.union(virtualTop, cell);
         }
         if (row == grid.length) {
-            weightedQuickUnionUF.union(cell, virtualBottom);
+            weightedQuickUnionUF.union(virtualBottom, cell);
         }
-        if (isOpen(row - 1, col)) {
+        if (isOnBounds(row - 1, col) && isOpen(row - 1, col)) {
             int cellAbove = (x - 1) * grid.length + y;
             weightedQuickUnionUF.union(cell, cellAbove);
             backwashUF.union(cell, cellAbove);
         }
-        if (isOpen(row + 1, col)) {
+        if (isOnBounds(row + 1, col) && isOpen(row + 1, col)) {
             int cellBelow = (x + 1) * grid.length + y;
             weightedQuickUnionUF.union(cell, cellBelow);
             backwashUF.union(cell, cellBelow);
         }
-        if (isOpen(row, col - 1)) {
+        if (isOnBounds(row, col - 1) && isOpen(row, col - 1)) {
             int cellLeft = x * grid.length + y - 1;
             weightedQuickUnionUF.union(cell, cellLeft);
             backwashUF.union(cell, cellLeft);
         }
-        if (isOpen(row, col + 1)) {
-            int cellRight = x * grid.length + y - 1;
+        if (isOnBounds(row, col + 1) && isOpen(row, col + 1)) {
+            int cellRight = x * grid.length + y + 1;
             weightedQuickUnionUF.union(cell, cellRight);
             backwashUF.union(cell, cellRight);
         }
 
-        // check cell above
-        if (x - 1 > 0) {
-            if (grid[x - 1][y]) {
-                int cellUp = (x - 1) * grid.length + y;
-                weightedQuickUnionUF.union(cell, cellUp);
-                backwashUF.union(cell, cellUp);
-            }
-        } else {
-            weightedQuickUnionUF.union(cell, virtualTop);
-            backwashUF.union(cell, virtualTop);
-        }
-
-        // check cell below
-        if (x + 1 < grid.length) {
-            if (grid[x + 1][y]) {
-                int cellDown = (x + 1) * grid.length + y;
-                weightedQuickUnionUF.union(cell, cellDown);
-                backwashUF.union(cell, cellDown);
-            }
-        } else {
-            weightedQuickUnionUF.union(cell, virtualBottom);
-            if (backwashUF.find(virtualTop) == backwashUF.find(cell)) {
-                backwashUF.union(cell, virtualBottom);
-            }
-        }
-
-        // check cell left
-        if (y - 1 > 0) {
-            if (grid[x][y - 1]) {
-                int cellLeft = x * grid.length + (y - 1);
-                weightedQuickUnionUF.union(cell, cellLeft);
-                backwashUF.union(cell, cellLeft);
-            }
-        }
-
-        // check cell right
-        if (y + 1 > grid.length) {
-            if (grid[x][y + 1]) {
-                int cellRight = x * grid.length + (y + 1);
-                weightedQuickUnionUF.union(cell, cellRight);
-                backwashUF.union(cell, cellRight);
-            }
-        }
     }
 
     // is the site (row, col) open?
@@ -123,9 +79,8 @@ public class Percolation {
     // is the site (row, col) full?
     public boolean isFull(int row, int col) {
         checkBounds(row, col);
-        int x = row - 1, y = col - 1;
-        int cell = x * grid.length + y;
-        return backwashUF.find(cell) == backwashUF.find(virtualTop);
+        int cell = (row - 1) * grid.length + col - 1;
+        return backwashUF.find(virtualTop) == backwashUF.find(cell);
     }
 
     // returns the number of open sites
@@ -138,6 +93,10 @@ public class Percolation {
         return weightedQuickUnionUF.find(virtualTop) == weightedQuickUnionUF.find(virtualBottom);
     }
 
+    private boolean isOnBounds(int row, int col) {
+        return row > 0 && row <= grid.length && col > 0 && col <= grid.length;
+    }
+
     private void checkBounds(int row, int col) {
         if (row < 1 || row > grid.length) {
             throw new IllegalArgumentException("row is out off bounds");
@@ -145,13 +104,5 @@ public class Percolation {
         if (col < 1 || col > grid.length) {
             throw new IllegalArgumentException("col is out off bounds");
         }
-    }
-
-    // test client (optional)
-    public static void main(String[] args) {
-        Percolation test = new Percolation(2);
-        test.open(1, 1);
-        test.open(2, 1);
-        StdOut.println(test.percolates());
     }
 }
