@@ -1,9 +1,2 @@
 algorithms.iml
-.idea/checkstyle-idea.xml
-.idea/dictionaries
-.idea/misc.xml
-.idea/modules.xml
-.idea/saveactions_settings.xml
-.idea/workspace.xml
-.idea/inspectionProfiles/Project_Default.xml
-.idea/libraries/_lift.xml
+.idea
