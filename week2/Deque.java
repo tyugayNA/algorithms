@@ -13,6 +13,7 @@ public class Deque<Item> implements Iterable<Item> {
     private class Node {
         Item item;
         Node next;
+        Node prev;
     }
 
     // construct an empty deque
@@ -36,11 +37,19 @@ public class Deque<Item> implements Iterable<Item> {
             throw new IllegalArgumentException("item is null");
         }
 
-        Node oldFirst = first;
-        first = new Node();
-        first.item = item;
-        first.next = oldFirst;
+        Node node = new Node();
+        node.item = item;
         size++;
+
+        if (isEmpty()) {
+            first = node;
+            last = node;
+            return;
+        }
+
+        node.next = first;
+        first.prev = node;
+        first = node;
     }
 
     // add the item to the back
@@ -48,18 +57,20 @@ public class Deque<Item> implements Iterable<Item> {
         if (item == null) {
             throw new IllegalArgumentException("item is null");
         }
-        Node oldLast = last;
+
+        Node node = new Node();
+        node.item = item;
+        size++;
 
         if (isEmpty()) {
-            first = oldLast;
-            last = oldLast;
+            first = node;
+            last = node;
+            return;
         }
 
-        last = new Node();
-        last.item = item;
-        last.next = null;
-        oldLast.next = last;
-        size++;
+        node.prev = last;
+        last.next = node;
+        last = node;
     }
 
     // remove and return the item from the front
