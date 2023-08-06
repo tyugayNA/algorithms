@@ -69,14 +69,6 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     public Iterator<Item> iterator() {
         return new Iterator<Item>() {
             private int i = size;
-            private Item[] copyItems;
-
-            {
-                copyItems = (Item[]) new Object[items.length];
-                for (int i = 0; i < items.length; i++) {
-                    copyItems[i] = items[i];
-                }
-            }
 
             public boolean hasNext() {
                 return i > 0;
@@ -93,18 +85,20 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
                 if (i == 1) {
                     i = 0;
-                    return copyItems[0];
+                    return items[0];
                 }
 
                 int random = StdRandom.uniformInt(i);
-                Item result = copyItems[random];
+                Item result = items[random];
                 i--;
 
                 if (random == i) {
                     return result;
                 }
 
-                copyItems[random] = copyItems[i];
+                Item copyItem = items[random];
+                items[random] = items[i];
+                items[i] = copyItem;
                 return result;
             }
         };
