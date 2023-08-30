@@ -24,19 +24,20 @@ public class BruteCollinearPoints {
             }
         }
         ArrayList<LineSegment> lineSegments = new ArrayList<LineSegment>();
-        Arrays.sort(points);
-        for (int i = 0; i < points.length - 1; i++) {
-            if (points[i].compareTo(points[i + 1]) == 0) {
+        Point[] copy = points.clone();
+        Arrays.sort(copy);
+        for (int i = 0; i < copy.length - 1; i++) {
+            if (copy[i].compareTo(copy[i + 1]) == 0) {
                 throw new IllegalArgumentException("repeated points");
             }
         }
-        for (int i = 0; i < points.length - 3; i++) {
-            for (int j = i + 1; j < points.length - 2; j++) {
-                for (int k = j + 1; k < points.length - 1; k++) {
-                    for (int l = k + 1; l < points.length; l++) {
-                        if ((points[i].slopeTo(points[j]) == points[i].slopeTo(points[k])) && (
-                                points[i].slopeTo(points[j]) == points[i].slopeTo(points[l]))) {
-                            LineSegment segment = new LineSegment(points[i], points[l]);
+        for (int i = 0; i < copy.length - 3; i++) {
+            for (int j = i + 1; j < copy.length - 2; j++) {
+                for (int k = j + 1; k < copy.length - 1; k++) {
+                    for (int l = k + 1; l < copy.length; l++) {
+                        if ((copy[i].slopeTo(copy[j]) == copy[i].slopeTo(copy[k])) && (
+                                copy[i].slopeTo(copy[j]) == copy[i].slopeTo(copy[l]))) {
+                            LineSegment segment = new LineSegment(copy[i], copy[l]);
                             if (!lineSegments.contains(segment)) {
                                 lineSegments.add(segment);
                             }
@@ -78,10 +79,18 @@ public class BruteCollinearPoints {
         StdDraw.show();
 
         BruteCollinearPoints bcp = new BruteCollinearPoints(points);
+        
         for (LineSegment segment : bcp.segments()) {
             StdOut.println(segment);
             segment.draw();
         }
+
+        StdOut.println();
+        for (LineSegment segment : bcp.segments()) {
+            StdOut.println(segment);
+            segment.draw();
+        }
+
         StdDraw.show();
     }
 }

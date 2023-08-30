@@ -35,7 +35,7 @@ public class FastCollinearPoints {
         segments = new ArrayList<>();
         Point[] copy = points.clone();
         for (Point pivot : points) {
-            Arrays.sort(copy, pivot.SLOPE_ORDER);
+            Arrays.sort(copy, pivot.slopeOrder());
             LinkedList<Point> collinear = new LinkedList<>();
 
             int i = 0;
