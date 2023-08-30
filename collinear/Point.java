@@ -117,11 +117,11 @@ public class Point implements Comparable<Point> {
     public final Comparator<Point> SLOPE_ORDER = new BySlopeOrder();
 
     private class BySlopeOrder implements Comparator<Point> {
-        public int compare(Point a, Point b) {
-            double aSlope = slopeTo(a);
-            double bSlope = slopeTo(b);
-            if (aSlope < bSlope) return -1;
-            if (bSlope > aSlope) return 1;
+        public int compare(Point p1, Point p2) {
+            double p1Slope = slopeTo(p1);
+            double p2Slope = slopeTo(p2);
+            if (p1Slope < p2Slope) return -1;
+            if (p1Slope > p2Slope) return 1;
             return 0;
         }
     }

@@ -10,6 +10,7 @@ import edu.princeton.cs.algs4.StdOut;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedList;
 
 public class FastCollinearPoints {
@@ -32,26 +33,31 @@ public class FastCollinearPoints {
         }
 
         segments = new ArrayList<>();
+        Point[] copy = points.clone();
         for (Point pivot : points) {
-            Point[] copy = points.clone();
             Arrays.sort(copy, pivot.SLOPE_ORDER);
             LinkedList<Point> collinear = new LinkedList<>();
 
             int i = 0;
-            double slope = 0.0;
+            double prevSlope = 0.0;
             for (Point point : copy) {
-                if (pivot.slopeTo(point) != slope || i + 1 == copy.length) {
+                if (pivot.slopeTo(point) != prevSlope || i + 1 == copy.length) {
+                    if (pivot.slopeTo(point) == prevSlope) {
+                        collinear.add(point);
+                    }
                     if (collinear.size() >= 4) {
-                        // if (pivot.compareTo(point) > 0) {
-                        LineSegment segment = new LineSegment(pivot, point);
-                        segments.add(segment);
-                        //}
+                        Collections.sort(collinear);
+                        if (pivot == collinear.getFirst()) {
+                            LineSegment segment = new LineSegment(collinear.getFirst(),
+                                                                  collinear.getLast());
+                            segments.add(segment);
+                        }
                     }
                     collinear.clear();
                     collinear.add(pivot);
                 }
                 collinear.add(point);
-                slope = pivot.slopeTo(point);
+                prevSlope = pivot.slopeTo(point);
                 i++;
             }
         }
