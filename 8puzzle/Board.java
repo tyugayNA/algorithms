@@ -52,7 +52,7 @@ public class Board {
     public int hamming() {
         int hammingNum = 0;
         for (int i = 0; i < board.length; i++) {
-            if (board[i] != i) {
+            if (board[i] != (i + 1) && board[i] != 0) {
                 hammingNum++;
             }
         }
@@ -62,8 +62,17 @@ public class Board {
     // sum of Manhattan distances between tiles and goal
     public int manhattan() {
         int manhattanNum = 0;
+        int x_exp, y_exp;
+        int x_cur, y_cur;
+
         for (int i = 0; i < board.length; i++) {
-            manhattanNum += Math.abs(i - board[i]);
+            if (board[i] != i + 1 && board[i] != 0) {
+                x_cur = i / dimension;
+                y_cur = i % dimension;
+                x_exp = (board[i] - 1) / dimension;
+                y_exp = (board[i] - 1) % dimension;
+                manhattanNum += Math.abs(x_exp - x_cur) + Math.abs(y_exp - y_cur);
+            }
         }
         return manhattanNum;
     }
@@ -103,19 +112,19 @@ public class Board {
                 x = indexEmptyTile / dimension;
                 y = indexEmptyTile % dimension;
                 // up site
-                if (x - 1 > 0) {
+                if (x - 1 >= 0) {
                     list.add((x - 1) * dimension + y);
                 }
                 // down site
-                if (x + 1 < dimension - 1) {
+                if (x + 1 <= dimension - 1) {
                     list.add((x + 1) * dimension + y);
                 }
                 // left site
-                if (y - 1 > 0) {
+                if (y - 1 >= 0) {
                     list.add(x * dimension + (y - 1));
                 }
                 // right site
-                if (y + 1 < dimension - 1) {
+                if (y + 1 <= dimension - 1) {
                     list.add(x * dimension + y + 1);
                 }
                 break;
@@ -150,37 +159,37 @@ public class Board {
                 x = i / dimension;
                 y = i % dimension;
                 // up site
-                if (x - 1 > 0) {
+                if (x - 1 >= 0) {
                     if (copy[(x - 1) * dimension + y] != 0) {
-                        int valSwap = copy[x];
-                        copy[x] = copy[(x - 1) * dimension + y];
+                        int valSwap = copy[i];
+                        copy[i] = copy[(x - 1) * dimension + y];
                         copy[(x - 1) * dimension + y] = valSwap;
                         break;
                     }
                 }
                 // down site
-                if (x + 1 < dimension - 1) {
+                if (x + 1 <= dimension - 1) {
                     if (copy[(x + 1) * dimension + y] != 0) {
-                        int valSwap = copy[x];
-                        copy[x] = copy[(x + 1) * dimension + y];
+                        int valSwap = copy[i];
+                        copy[i] = copy[(x + 1) * dimension + y];
                         copy[(x + 1) * dimension + y] = valSwap;
                         break;
                     }
                 }
                 // left site
-                if (y - 1 > 0) {
+                if (y - 1 >= 0) {
                     if (copy[x * dimension + (y - 1)] != 0) {
-                        int valSwap = copy[x];
-                        copy[x] = copy[x * dimension + (y - 1)];
+                        int valSwap = copy[i];
+                        copy[i] = copy[x * dimension + (y - 1)];
                         copy[x * dimension + (y - 1)] = valSwap;
                         break;
                     }
                 }
                 // right site
-                if (y + 1 < dimension - 1) {
+                if (y + 1 <= dimension - 1) {
                     if (copy[x * dimension + y + 1] != 0) {
-                        int valSwap = copy[x];
-                        copy[x] = copy[x * dimension + y + 1];
+                        int valSwap = copy[i];
+                        copy[i] = copy[x * dimension + y + 1];
                         copy[x * dimension + y + 1] = valSwap;
                         break;
                     }
@@ -205,7 +214,7 @@ public class Board {
             for (int j = 0; j < n; j++)
                 tiles[i][j] = in.readInt();
         Board initial = new Board(tiles);
-        StdOut.print(initial.toString());
-        initial.neighbors();
+        StdOut.println(initial.toString());
+        StdOut.println(initial.hamming());
     }
 }
