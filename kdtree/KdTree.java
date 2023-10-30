@@ -35,22 +35,63 @@ public class KdTree {
         if (point == null) {
             throw new IllegalArgumentException();
         }
-        root = insert(root, point);
+        root = insertX(root, point);
     }
 
-    private Node insert(Node x, Point2D point) {
-        // if added new Node then
-        if (root == null) {
-            root = new Node(point);
+    private Node insertX(Node node, Point2D point) {
+        if (node == null) {
             size++;
-            return x;
+            return new Node(point);
         }
-        return x;
+        if (point.x() < node.p.x()) {
+            node.lb = insertY(node.lb, point);
+        } else if (point.x() > node.p.x()) {
+            node.rt = insertY(node.rt, point);
+        }
+        return node;
     }
 
-    public boolean contains(Point2D p) {
+    private Node insertY(Node node, Point2D point) {
+        if (node == null) {
+            size++;
+            return new Node(point);
+        }
+        if (point.y() < node.p.y()) {
+            node.lb = insertX(node.lb, point);
+        } else if (point.y() > node.p.y()) {
+            node.rt = insertX(node.rt, point);
+        }
+        return node;
+    }
 
-        return false;
+    public boolean contains(Point2D point) {
+        return containX(root, point);
+    }
+
+    private boolean containX(Node node, Point2D point) {
+        if (node == null) {
+            return false;
+        }
+        if (point.x() < node.p.x()) {
+            return containY(node.lb, point);
+        } else if (point.x() > node.p.x()) {
+            return containY(node.rt, point);
+        } else {
+            return containY(node, point);
+        }
+    }
+
+    private boolean containY(Node node, Point2D point) {
+        if (node == null) {
+            return false;
+        }
+        if (point.y() < node.p.y()) {
+            return containX(node.lb, point);
+        } else if (point.y() > node.p.y()) {
+            return containX(node.rt, point);
+        } else {
+            return containX(node, point);
+        }
     }
 
     public void draw() {
