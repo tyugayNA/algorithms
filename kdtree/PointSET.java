@@ -69,6 +69,17 @@ public class PointSET {
     }
 
     public static void main(String[] args) {
-
+        PointSET set = new PointSET();
+        Point2D p1 = new Point2D(0.4, 0.6);
+        Point2D p2 = new Point2D(0.2, 0.4);
+        Point2D p3 = new Point2D(0.7, 0.8);
+        Point2D p4 = new Point2D(0.7, 0.5);
+        Point2D p5 = new Point2D(0.3, 0.8);
+        set.insert(p1);
+        set.insert(p2);
+        set.insert(p3);
+        set.insert(p4);
+        set.insert(p5);
+        set.draw();
     }
 }
