@@ -138,17 +138,15 @@ public class KdTree {
     }
 
     public Iterable<Point2D> range(RectHV rect) {
+        if (rect == null) {
+            throw new IllegalArgumentException("rect is null");
+        }
         List<Point2D> list = new ArrayList<>();
-
         helperRange(rect, root, list);
-
         return list;
     }
 
     private void helperRange(RectHV rect, Node node, List<Point2D> list) {
-        if (rect == null) {
-            throw new IllegalArgumentException("rect is null");
-        }
         if (node == null) {
             return;
         }
@@ -170,13 +168,23 @@ public class KdTree {
         if (isEmpty()) {
             return null;
         }
-        double distance = Double.MAX_VALUE;
-        return helperNearest(point, root, distance);
+        Point2D nearestPoint = root.p;
+        helperNearest(point, root, nearestPoint);
+        return nearestPoint;
+
     }
 
-    private Point2D helperNearest(Point2D point, Node node, double distance) {
-        
-        return null;
+    private void helperNearest(Point2D point, Node node, Point2D nearestPoint) {
+        if (node == null) {
+            return;
+        }
+        if (node.lb.rect.distanceTo(point) < nearestPoint.distanceTo(point)) {
+            nearestPoint = node.lb.p;
+            helperNearest(point, node.lb, nearestPoint);
+        } else if (node.rt.rect.distanceTo(point) < nearestPoint.distanceTo(point)) {
+            nearestPoint = node.rt.p;
+            helperNearest(point, node.rt, nearestPoint);
+        }
     }
 
 
@@ -198,5 +206,7 @@ public class KdTree {
         StdOut.println(tree.contains(p4));
         StdOut.println(tree.contains(p5));
         tree.draw();
+
+        tree.nearest(new Point2D(0.1, 0.1));
     }
 }
