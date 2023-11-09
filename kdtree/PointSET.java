@@ -43,6 +43,9 @@ public class PointSET {
     }
 
     public Iterable<Point2D> range(RectHV rect) {
+        if (rect == null) {
+            throw new IllegalArgumentException("null rect is accepted");
+        }
         List<Point2D> list = new ArrayList<>();
         for (Point2D p : points) {
             if (rect.contains(p)) {
@@ -53,6 +56,9 @@ public class PointSET {
     }
 
     public Point2D nearest(Point2D point) {
+        if (point == null) {
+            throw new IllegalArgumentException("null point is accepted");
+        }
         if (isEmpty()) {
             return null;
         }
