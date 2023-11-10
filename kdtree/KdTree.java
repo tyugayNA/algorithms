@@ -1,7 +1,6 @@
 import edu.princeton.cs.algs4.Point2D;
 import edu.princeton.cs.algs4.RectHV;
 import edu.princeton.cs.algs4.StdDraw;
-import edu.princeton.cs.algs4.StdOut;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -113,32 +112,6 @@ public class KdTree {
         }
     }
 
-    public void drawPoints() {
-        drawPointX(root);
-    }
-
-    private void drawPointX(Node node) {
-        if (node == null) {
-            return;
-        }
-        StdDraw.setPenColor(StdDraw.BLACK);
-        StdDraw.setPenRadius(0.02);
-        StdDraw.point(node.p.x(), node.p.y());
-        drawPointY(node.lb);
-        drawPointY(node.rt);
-    }
-
-    private void drawPointY(Node node) {
-        if (node == null) {
-            return;
-        }
-        StdDraw.setPenColor(StdDraw.BLACK);
-        StdDraw.setPenRadius(0.02);
-        StdDraw.point(node.p.x(), node.p.y());
-        drawPointX(node.lb);
-        drawPointX(node.rt);
-    }
-
     public void draw() {
         drawX(root);
     }
@@ -148,9 +121,10 @@ public class KdTree {
             return;
         }
         StdDraw.setPenColor(StdDraw.BLACK);
-        StdDraw.setPenRadius(0.01);
+        StdDraw.setPenRadius(0.02);
         StdDraw.point(node.p.x(), node.p.y());
         StdDraw.setPenColor(StdDraw.RED);
+        StdDraw.setPenRadius(0.01);
         StdDraw.line(node.p.x(), node.rect.ymin(), node.p.x(), node.rect.ymax());
         drawY(node.lb);
         drawY(node.rt);
@@ -162,9 +136,10 @@ public class KdTree {
             return;
         }
         StdDraw.setPenColor(StdDraw.BLACK);
-        StdDraw.setPenRadius(0.01);
+        StdDraw.setPenRadius(0.02);
         StdDraw.point(node.p.x(), node.p.y());
         StdDraw.setPenColor(StdDraw.BLUE);
+        StdDraw.setPenRadius(0.01);
         StdDraw.line(node.rect.xmin(), node.p.y(), node.rect.xmax(), node.p.y());
         drawX(node.lb);
         drawX(node.rt);
@@ -207,19 +182,27 @@ public class KdTree {
     }
 
     private Point2D helperNearest(Point2D point, Node node, Point2D nearestPoint) {
-        if (node.lb != null && node.lb.p.distanceSquaredTo(point) < nearestPoint.distanceSquaredTo(point)) {
-            nearestPoint = node.lb.p;
-            return helperNearest(point, node.lb, nearestPoint);
-        } else if (node.rt != null && node.rt.p.distanceSquaredTo(point) < nearestPoint.distanceSquaredTo(point)) {
-            nearestPoint = node.rt.p;
-            return helperNearest(point, node.rt, nearestPoint);
+        if (node == null) {
+            return nearestPoint;
+        }
+        if (point.distanceSquaredTo(nearestPoint) > point.distanceSquaredTo(node.p)) {
+            nearestPoint = node.p;
+        }
+        if (node.lb != null && node.lb.rect.distanceSquaredTo(point) < nearestPoint.distanceSquaredTo(point)) {
+            nearestPoint = helperNearest(point, node.lb, nearestPoint);
+        }
+        if (node.rt != null && node.rt.rect.distanceSquaredTo(point) < nearestPoint.distanceSquaredTo(point)) {
+            nearestPoint = helperNearest(point, node.rt, nearestPoint);
         }
         return nearestPoint;
     }
 
 
     public static void main(String[] args) {
+
         KdTree tree = new KdTree();
+
+        /*
         tree.insert(new Point2D(0.372, 0.497));
         tree.insert(new Point2D(0.564, 0.413));
         tree.insert(new Point2D(0.226, 0.577));
@@ -230,13 +213,22 @@ public class KdTree {
         tree.insert(new Point2D(0.862, 0.825));
         tree.insert(new Point2D(0.785, 0.725));
         tree.insert(new Point2D(0.499, 0.208));
+         */
 
-        tree.drawPoints();
+        tree.insert(new Point2D(0.7, 0.2));
+        tree.insert(new Point2D(0.5, 0.4));
+        tree.insert(new Point2D(0.2, 0.3));
+        tree.insert(new Point2D(0.4, 0.7));
+        tree.insert(new Point2D(0.9, 0.6));
+
         tree.draw();
 
-        Point2D point = new Point2D(0.623, 0.086);
-        StdOut.print(tree.nearest(point));
+        //Point2D point = new Point2D(0.623, 0.086);
+        Point2D point = new Point2D(0.696, 0.836);
+        Point2D nearestPoint = tree.nearest(point);
         StdDraw.setPenColor(StdDraw.RED);
+        StdDraw.setPenRadius(0.03);
         point.draw();
+
     }
 }
